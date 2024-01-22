@@ -1,31 +1,4 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
-// Criar um novo usuário
-exports.createUser = async (req, res) => {
- try {
-  const { email, password } = req.body;
-
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-   return res.status(400).json({ error: "E-mail já cadastrado" });
-  }
-
-  const hashedPassword = bcrypt.hashSync(password, 10);
-  const newUser = new User({ email, password: hashedPassword });
-
-  await newUser.save();
-
-  // Criar token de autenticação
-  const token = jwt.sign({ userId: newUser._id }, "secreto", { expiresIn: "1h" });
-
-  res.status(201).json({ token });
- } catch (error) {
-  console.error(error);
-  res.status(500).json({ error: "Erro ao criar usuário" });
- }
-};
 
 // Completar o perfil do usuário
 exports.completeProfile = async (req, res) => {
