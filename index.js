@@ -3,16 +3,23 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const apiRoutes = require("./routes/Routes");
 const dotenv = require("dotenv");
+const cors = require("cors");
+const app = express();
 
 dotenv.config();
 
-const app = express();
+app.use(bodyParser.json());
+
+app.use(
+ cors({
+  origin: "http://localhost:4200",
+ })
+);
+
 const { MONGO_DB_USERNAME, MONGO_DB_PASSWORD, SERVER_PORT } = process.env;
 
 const mongoURI = `mongodb+srv://${MONGO_DB_USERNAME}:${MONGO_DB_PASSWORD}@cluster0.ksyib9i.mongodb.net/`;
 const PORT = SERVER_PORT || 3000;
-
-app.use(bodyParser.json());
 
 mongoose.connect(mongoURI, {
  useNewUrlParser: true,
