@@ -8,10 +8,8 @@ const multer = require("multer");
 const userController = require("../controllers/UserController");
 const eventController = require("../controllers/EventController");
 const authController = require("../controllers/AuthController");
-const completeProfileMiddleware = require("../middleware/completeProfile");
-const dotenv = require("dotenv");
+const authMiddleware = require("../middleware/Auth");
 
-dotenv.config();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -43,17 +41,18 @@ router.use(async (req, res, next) => {
 });
 
 // Rotas do Usuário
-router.get("/users", completeProfileMiddleware, userController.getAllUsers);
-router.get("/users/:userId", completeProfileMiddleware, userController.getUserById);
-router.put("/users/:userId", completeProfileMiddleware, userController.updateUser);
-router.delete("/users/:userId", completeProfileMiddleware, userController.deleteUser);
+router.get("/users", authMiddleware, userController.getAllUsers);
+router.get("/users/:userId", authMiddleware, userController.getUserById);
+router.put("/users/:userId", authMiddleware, userController.updateUser);
+router.delete("/users/:userId", authMiddleware, userController.deleteUser);
 
 // Rotas do Evento
-router.post("/events", completeProfileMiddleware, eventController.createEvent);
-router.get("/events", completeProfileMiddleware, eventController.getAllEvents);
-router.get("/events/:eventId", completeProfileMiddleware, eventController.getEventById);
-router.put("/events/:eventId", completeProfileMiddleware, eventController.updateEvent);
-router.delete("/events/:eventId", completeProfileMiddleware, eventController.deleteEvent);
+router.post("/events", authMiddleware, eventController.createEvent);
+router.get("/events", authMiddleware, eventController.getAllEvents);
+router.get("/events/:eventId", authMiddleware, eventController.getEventById);
+router.get("/events-user", authMiddleware, eventController.getEventsByUser);
+router.put("/events/:eventId", authMiddleware, eventController.updateEvent);
+router.delete("/events/:eventId", authMiddleware, eventController.deleteEvent);
 
 // Rota para Preenchimento do Perfil
 router.put("/complete-profile/:userId", upload.single("photo"), userController.completeProfile);

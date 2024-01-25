@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const apiRoutes = require("./routes/Routes");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const moment = require("moment");
 const app = express();
 
 dotenv.config();
@@ -28,12 +29,8 @@ mongoose.connect(mongoURI, {
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Erro de conexão ao MongoDB:"));
-db.once("open", () => {
- console.log("Conectado ao MongoDB");
-});
+db.once("open", () => {});
 
 app.use("/api", apiRoutes);
 
-app.listen(PORT, () => {
- console.log(`Servidor rodando na porta ${PORT}`);
-});
+app.listen(PORT, () => {});
