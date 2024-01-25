@@ -3,19 +3,20 @@ const User = require("../models/User");
 // Completar o perfil do usuário
 exports.completeProfile = async (req, res) => {
  try {
-  const { name, lastName, photo } = req.body;
+  const { name, lastName } = req.body;
 
-  const updatedUser = await User.findByIdAndUpdate(
-   req.params.userId,
-   { name, lastName, photo, isActive: true },
-   { new: true }
+  const photo = req.file ? { data: req.file.buffer, contentType: req.file.mimetype } : null;
+
+  const updatedUser = await User.updateOne(
+   { _id: req.params.userId },
+   { $set: { name, lastName, photo, isActive: true } }
   );
 
   if (!updatedUser) {
    return res.status(404).json({ error: "Usuário não encontrado" });
   }
 
-  res.status(200).json(updatedUser);
+  res.status(200).json({ message: "Perfil atualizado com sucesso" });
  } catch (error) {
   console.error(error);
   res.status(500).json({ error: "Erro ao preencher o perfil" });

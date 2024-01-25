@@ -5,7 +5,10 @@ const userSchema = new mongoose.Schema({
  password: { type: String, required: true },
  name: String,
  lastName: String,
- photo: String,
+ photo: {
+  data: Buffer,
+  contentType: String,
+ },
  isActive: { type: Boolean, default: false },
 });
 

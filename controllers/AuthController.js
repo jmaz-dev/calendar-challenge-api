@@ -48,7 +48,7 @@ exports.login = async (req, res) => {
    return res.status(200).json({ needsProfile: true, userId: user._id, token });
   }
 
-  res.status(200).json({ token, userId: user._id });
+  res.status(200).json({ token, userId: user._id, needsProfile: false });
  } catch (error) {
   console.error(error);
   res.status(500).json({ error: "Erro ao fazer login" });

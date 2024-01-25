@@ -3,6 +3,7 @@ const express = require("express");
 
 const router = express.Router();
 const jwt = require("jsonwebtoken-promisified");
+const multer = require("multer");
 
 const userController = require("../controllers/UserController");
 const eventController = require("../controllers/EventController");
@@ -11,6 +12,8 @@ const completeProfileMiddleware = require("../middleware/completeProfile");
 const dotenv = require("dotenv");
 
 dotenv.config();
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // Rota de Login
 router.post("/login", authController.login);
@@ -32,7 +35,6 @@ router.use(async (req, res, next) => {
 
   req.userId = decoded.userId;
 
-  console.log("Token válido. Payload decodificado: ", decoded);
   next();
  } catch (error) {
   console.log("Token inválido: ", error.message);
@@ -41,19 +43,19 @@ router.use(async (req, res, next) => {
 });
 
 // Rotas do Usuário
-router.get("/users", userController.getAllUsers);
-router.get("/users/:userId", userController.getUserById);
-router.put("/users/:userId", userController.updateUser);
-router.delete("/users/:userId", userController.deleteUser);
+router.get("/users", completeProfileMiddleware, userController.getAllUsers);
+router.get("/users/:userId", completeProfileMiddleware, userController.getUserById);
+router.put("/users/:userId", completeProfileMiddleware, userController.updateUser);
+router.delete("/users/:userId", completeProfileMiddleware, userController.deleteUser);
 
 // Rotas do Evento
-router.post("/events", eventController.createEvent);
-router.get("/events", eventController.getAllEvents);
-router.get("/events/:eventId", eventController.getEventById);
-router.put("/events/:eventId", eventController.updateEvent);
-router.delete("/events/:eventId", eventController.deleteEvent);
+router.post("/events", completeProfileMiddleware, eventController.createEvent);
+router.get("/events", completeProfileMiddleware, eventController.getAllEvents);
+router.get("/events/:eventId", completeProfileMiddleware, eventController.getEventById);
+router.put("/events/:eventId", completeProfileMiddleware, eventController.updateEvent);
+router.delete("/events/:eventId", completeProfileMiddleware, eventController.deleteEvent);
 
 // Rota para Preenchimento do Perfil
-router.put("/complete-profile/:userId", completeProfileMiddleware, userController.completeProfile);
+router.put("/complete-profile/:userId", upload.single("photo"), userController.completeProfile);
 
 module.exports = router;
