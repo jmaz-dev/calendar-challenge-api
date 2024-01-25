@@ -2,11 +2,11 @@
  ## Api criada em node com Express(framework)
  
 ### Bibliotecas utilizadas:
--mongoose
--body parser
--routes
--dotenv
--cors
--moment
--jwt-promisified
--multer
+*mongoose
+*body parser
+*routes
+*dotenv
+*cors
+*moment
+*jwt-promisified
+*multer
