@@ -6,52 +6,8 @@ yarn-error.log
 # Environment
 .env
 
-# Editor
-.vscode/
-.idea/
-
-# Logs
-logs/
-*.log
-
-# Dependency directories
-.jest/
-.pnpm/
-pnpm-debug.log
-*.pnp
-node_modules/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
+# Eslint cache
 .eslintcache
 
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn
-yarn-error.log
-.pnp/
-.yarn-integrity
-
-# dotenv
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
-# Puppeteer
-.puppeteer/
-
-# Svelte
-__sapper__/
-
-# Rollup
-.rollup.cache/
+# Vercel
+vercel.json
