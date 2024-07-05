@@ -1,42 +1,36 @@
+require("moment");
+require("dotenv").config();
+
+//packages
 const express = require("express");
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const apiRoutes = require("./routes/Routes");
-const dotenv = require("dotenv");
 const cors = require("cors");
-const moment = require("moment");
 const app = express();
-
-dotenv.config();
+const port = process.env.SERVER_PORT;
 
 app.use(bodyParser.json());
 
+//solve CORS
 app.use(
   cors({
     origin: "*",
   })
 );
 
-const { MONGO_DB_USERNAME, MONGO_DB_PASSWORD, SERVER_PORT } = process.env;
+//DB connection
+require("./config/db.js");
 
-const mongoURI = `mongodb+srv://${MONGO_DB_USERNAME}:${MONGO_DB_PASSWORD}@cluster0.ksyib9i.mongodb.net/`;
-const PORT = SERVER_PORT || 3000;
-
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "erro de conexão ao mongodb"));
-db.once("open", () => {
-  console.log("db conectado");
-
-  app.listen(PORT, () => {
-    console.log(`porta ${PORT}`);
-  });
-});
-
+//routes
 app.use("/api", apiRoutes);
+app.listen(port || 5000, () => {
+  console.log(`app rodando na porta ${port}`);
+});
+
+// Test
+router.get("/", (req, res) => {
+  res.send("API Working!");
+});
+
 
 module.exports = app;

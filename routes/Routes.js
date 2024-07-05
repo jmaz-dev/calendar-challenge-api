@@ -21,23 +21,23 @@ router.post("/users", authController.createUser);
 
 // Middleware para verificar o token
 router.use(async (req, res, next) => {
- const token = req.headers.authorization;
- const secret = process.env.JWT_TOKEN_SECRET;
+  const token = req.headers.authorization;
+  const secret = process.env.JWT_TOKEN_SECRET;
 
- if (!token) {
-  return res.status(401).json({ error: "Token não fornecido" });
- }
+  if (!token) {
+    return res.status(401).json({ error: "Token não fornecido" });
+  }
 
- try {
-  const decoded = await jwt.verifyAsync(token, secret, { algorithm: "HS512" });
+  try {
+    const decoded = await jwt.verifyAsync(token, secret, { algorithm: "HS512" });
 
-  req.userId = decoded.userId;
+    req.userId = decoded.userId;
 
-  next();
- } catch (error) {
-  console.log("Token inválido: ", error.message);
-  return res.status(401).json({ error: "Token inválido" });
- }
+    next();
+  } catch (error) {
+    console.log("Token inválido: ", error.message);
+    return res.status(401).json({ error: "Token inválido" });
+  }
 });
 
 // Rotas do Usuário
